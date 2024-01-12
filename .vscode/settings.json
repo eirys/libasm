@@ -1,0 +1,6 @@
+{
+    "comment-divider.length": 50,
+    "comment-divider.mainHeaderTransform": "uppercase",
+    "comment-divider.shouldLengthIncludeIndent": true,
+    "comment-divider.subheaderTransform": "uppercase"
+}
