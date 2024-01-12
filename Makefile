@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/12 14:16:43 by etran             #+#    #+#              #
-#    Updated: 2024/01/12 14:36:31 by etran            ###   ########.fr        #
+#    Updated: 2024/01/12 17:11:40 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,42 +20,45 @@ NAME		:=	libasm.a
 # --------------- DIRECTORY NAMES -------------- #
 SRC_DIR		:=	src
 OBJ_DIR		:=	obj
+TEST_DIR	:=	tests
 
 # ---------------- SUBDIRECTORIES -------------- #
-SUBDIRS		:=
+LIB_DIR		:=	lib
+BONUS_DIR	:=	$(LIB_DIR)/bonus
+
+SUBDIRS		:=	$(LIB_DIR) \
+				$(BONUS_DIR)
 
 OBJ_SUBDIRS	:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
-# INC_SUBDIRS	:=	$(addprefix $(SRC_DIR)/,$(SUBDIRS)) \
-# 				$(SHD_DIR)
 
 # ---------------- SOURCE FILES ---------------- #
-SRC_FILES	:=
+SRC_FILES	:= hello.s
 
 SRC			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES))
-# OBJ			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES:.cpp=.o))
-# DEP			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES:.cpp=.d))
+OBJ			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES:.s=.o))
 
 # ----------------- COMPILATION ---------------- #
-CXX			:=	nasm
-EXTRA		:=	-Wall -Werror -Wextra
-INCLUDES	:=	$(addprefix -I./,$(INC_SUBDIRS))
+ASM			:=	nasm
+ASFLAGS		:=	-felf64
 
-MACROS		:=	__DEBUG \
-				__INFO
-
-DEFINES		:=	$(addprefix -D,$(MACROS))
-
-CFLAGS		:=	$(EXTRA) \
-				$(INCLUDES) \
-				-g \
-				$(DEFINES)
+ARCHIVER	:=	ar
+ARFLAGS		:=	rcs
 
 # -------------------- MISC -------------------- #
 RM			:=	rm -rf
 
 # -------------------- TESTS ------------------- #
 TEST_BIN	:=	test
-TEST_FILE	:=	main.c
+
+MACROS		:=	__VERBOSE
+
+DEFINES		:=	$(addprefix -D,$(MACROS))
+
+CXX			:=	gcc
+CFLAGS		:=	$(EXTRA) \
+				$(DEFINES)
+
+TEST_FILE	:=	$(TEST_DIR)/main.c
 
 # ============================================================================ #
 #                                     RULES                                    #
@@ -64,34 +67,38 @@ TEST_FILE	:=	main.c
 .PHONY: all
 all: $(NAME)
 
-# -include $(DEP)
-
 $(TEST_BIN): $(NAME)
 	@$(CXX) $(CFLAGS) $(TEST_FILE) -o $(TEST_BIN) $(NAME)
 	@echo "\`$(TEST_BIN)\` successfully created."
-	@sleep 1
-	@echo "Running \`$(TEST_BIN)\`..."
-	@sleep 1
+	@echo "== Running \`$(TEST_BIN)\`... =="
 	@./$(TEST_BIN)
+	@echo "== Done. =============="
+	@make -s clean_test
 
-# Compile binary
-$(NAME): $(SHD_BIN) $(OBJ)
-	@$(CXX) $(CFLAGS) $(OBJ) -o $(NAME) $(LDFLAGS)
+# Compile library
+$(NAME): $(OBJ)
+	@echo "Compiling $(NAME)..."
+	@$(ARCHIVER) $(ARFLAGS) $(NAME) $(OBJ)
 	@echo "\`$(NAME)\` successfully created."
 
 # Compile obj files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 	@mkdir -p $(OBJ_DIR) $(OBJ_SUBDIRS)
 	@echo "Compiling file $<..."
-	@$(CXX) $(CFLAGS) -c $< -o $@
+	@$(ASM) $(ASFLAGS) $< -o $@
 
 .PHONY: clean
 clean:
 	@${RM} $(OBJ_DIR)
 	@echo "Cleaning object files and dependencies."
 
+.PHONY: clean_test
+clean_test:
+	@${RM} $(TEST_BIN)
+	@echo "Removed $(TEST_BIN)."
+
 .PHONY: fclean
-fclean: clean
+fclean: clean clean_test
 	@${RM} $(NAME)
 	@echo "Removed $(NAME)."
 
