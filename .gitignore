@@ -1,2 +1,6 @@
-obj/
-libasm.a
+/*
+
+!src
+!tests
+!Makefile
+!.gitignore
