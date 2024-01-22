@@ -22,7 +22,7 @@ ft_strdup:
     call    malloc      wrt ..plt   ; rax = malloc(rdi);
     pop     rsi                     ; rsi = stack.pop();
     test    rax,        rax         ; if (rax == nullptr)
-    jz      .end                    ;   break;
+    jz      .end                    ;   return;
     mov     rdi,        rax         ; rdi = rax;
     call    ft_strcpy               ; rax = ft_strcpy(rdi, rsi);
 

@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/12 14:16:43 by etran             #+#    #+#              #
-#    Updated: 2024/01/18 16:55:58 by etran            ###   ########.fr        #
+#    Updated: 2024/01/22 15:44:55 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,9 @@ OBJ_SUBDIRS	:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 SRC_FILES	:=	$(LIB_DIR)/ft_strlen.s \
 				$(LIB_DIR)/ft_strcpy.s \
 				$(LIB_DIR)/ft_strcmp.s \
-				$(LIB_DIR)/ft_strdup.s
+				$(LIB_DIR)/ft_strdup.s \
+				$(LIB_DIR)/ft_read.s \
+				$(LIB_DIR)/ft_write.s
 
 SRC			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES))
 OBJ			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES:.s=.o))
