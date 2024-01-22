@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/12 17:02:07 by etran             #+#    #+#             */
-/*   Updated: 2024/01/22 15:45:53 by etran            ###   ########.fr       */
+/*   Created: 2024/01/22 16:53:09 by etran             #+#    #+#             */
+/*   Updated: 2024/01/22 17:49:53 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,22 @@
 #include <assert.h>
 #include <unistd.h>
 
+// Mandatory
 uint64_t    ft_strlen(char const* str);
 char*       ft_strcpy(char* dst, char const* src);
 char*       ft_strdup(char const* src);
 int         ft_strcmp(const char *s1, const char *s2);
 ssize_t     ft_write(int fildes, const void *buf, size_t nbyte);
 ssize_t     ft_read(int fildes, void *buf, size_t nbyte);
+
+// Bonus
+typedef struct s_list
+{
+    void            *data;
+    struct s_list   *next;
+} t_list;
+
+void        ft_list_push_front(t_list **begin_list, void *data);
 
 #define LOG(X)  printf("%s\n", X)
 
@@ -42,16 +52,22 @@ int main() {
 
     assert(ft_strcmp("42a\0", "42ai\0") < 0);
 
-    ft_write(STDOUT_FILENO, lol, len);
-    ft_write(STDOUT_FILENO, "\n", 1);
-int new_len  = len;
-    while (ft_read(STDIN_FILENO, tmp, len) != 0)
+    int new_len = len;
+    while ((new_len = ft_read(STDIN_FILENO, tmp, new_len)) != 0)
     {
-         ft_write(STDOUT_FILENO, tmp, new_len);
+        ft_write(STDOUT_FILENO, tmp, new_len);
         tmp[new_len] = 0;
     }
 
     free(lol);
     free(tmp);
+
+    char a[] = "grosse merde\n";
+    t_list* begin = NULL;
+    ft_list_push_front(&begin, &a);
+    assert(begin != 0);
+    ft_write(STDOUT_FILENO, (char *)begin->data, ft_strlen((char *)begin->data));
+
+    free(begin);
     return 0;
 }

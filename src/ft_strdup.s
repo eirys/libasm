@@ -1,11 +1,5 @@
 global ft_strdup
 
-; Import external symbols
-extern malloc
-extern ft_strcpy
-extern ft_strlen
-
-
 ; -----------------------
 section .data
 
@@ -14,6 +8,11 @@ section .bss
 
 ; -----------------------
 section .text
+
+; Import external symbols
+extern malloc
+extern ft_strcpy
+extern ft_strlen
 
 ft_strdup:
     push    rdi                     ; stack.push(rdi);

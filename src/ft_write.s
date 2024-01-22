@@ -1,7 +1,5 @@
 global ft_write
 
-extern __errno_location
-; extern int *__errno_location (void) __THROW __attribute__ ((__const__));
 ; -----------------------
 section .data
 
@@ -10,6 +8,9 @@ section .bss
 
 ; -----------------------
 section .text
+
+; extern int *__errno_location (void) __THROW __attribute__ ((__const__));
+extern __errno_location
 
 ; ssize_t write(int fildes, const void *buf, size_t nbyte);
 ft_write:

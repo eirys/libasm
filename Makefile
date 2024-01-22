@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/12 14:16:43 by etran             #+#    #+#              #
-#    Updated: 2024/01/22 15:44:55 by etran            ###   ########.fr        #
+#    Updated: 2024/01/22 17:02:45 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,21 +23,21 @@ OBJ_DIR		:=	obj
 TEST_DIR	:=	tests
 
 # ---------------- SUBDIRECTORIES -------------- #
-LIB_DIR		:=	lib
-BONUS_DIR	:=	$(LIB_DIR)/bonus
+BONUS_DIR	:=	bonus
 
-SUBDIRS		:=	$(LIB_DIR) \
+SUBDIRS		:=	\
 				$(BONUS_DIR)
 
 OBJ_SUBDIRS	:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 
 # ---------------- SOURCE FILES ---------------- #
-SRC_FILES	:=	$(LIB_DIR)/ft_strlen.s \
-				$(LIB_DIR)/ft_strcpy.s \
-				$(LIB_DIR)/ft_strcmp.s \
-				$(LIB_DIR)/ft_strdup.s \
-				$(LIB_DIR)/ft_read.s \
-				$(LIB_DIR)/ft_write.s
+SRC_FILES	:=	ft_strlen.s \
+				ft_strcpy.s \
+				ft_strcmp.s \
+				ft_strdup.s \
+				ft_read.s \
+				ft_write.s \
+				$(BONUS_DIR)/ft_list_push_front.s
 
 SRC			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES))
 OBJ			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES:.s=.o))
@@ -72,9 +72,10 @@ TEST_FILE	:=	$(TEST_DIR)/main.c
 .PHONY: all
 all: $(NAME)
 
+# Test library
 $(TEST_BIN): $(NAME)
 	@$(CXX) $(CFLAGS) $(TEST_FILE) -o $(TEST_BIN) $(NAME)
-	@echo "\`$(TEST_BIN)\` successfully created."
+	@echo "\`$(TEST_BIN)\` file successfully created."
 	@echo "== Running \`$(TEST_BIN)\`... =="
 	@./$(TEST_BIN)
 	@echo "== Done. =============="
