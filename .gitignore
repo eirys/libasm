@@ -4,3 +4,4 @@
 !tests
 !Makefile
 !.gitignore
+!ft_atoi_base.c
