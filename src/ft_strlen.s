@@ -20,5 +20,5 @@ ft_strlen:
     jmp     .loop               ; continue;
 
 .end:
-    sub     rax, rdi            ; rax = rdi;
+    sub     rax,    rdi         ; rax = rdi;
     ret

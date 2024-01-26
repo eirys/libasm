@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 16:53:09 by etran             #+#    #+#             */
-/*   Updated: 2024/01/22 17:49:53 by etran            ###   ########.fr       */
+/*   Updated: 2024/01/26 19:37:55 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@
 uint64_t    ft_strlen(char const* str);
 char*       ft_strcpy(char* dst, char const* src);
 char*       ft_strdup(char const* src);
-int         ft_strcmp(const char *s1, const char *s2);
-ssize_t     ft_write(int fildes, const void *buf, size_t nbyte);
-ssize_t     ft_read(int fildes, void *buf, size_t nbyte);
+int         ft_strcmp(const char* s1, const char* s2);
+ssize_t     ft_write(int fildes, const void* buf, size_t nbyte);
+ssize_t     ft_read(int fildes, void* buf, size_t nbyte);
+int         ft_atoi_base(char const* str, char const* base);
 
 // Bonus
 typedef struct s_list
@@ -39,7 +40,14 @@ void        ft_list_push_front(t_list **begin_list, void *data);
 
 #define LOG(X)  printf("%s\n", X)
 
-int main() {
+int main(int ac, char** av) {
+    if (ac != 3) {
+        LOG("Input 2 args to test atoi as well.");
+        return 1;
+    }
+
+	printf("%d\n", ft_atoi_base(av[1],av[2]));
+
     char* lol = ft_strdup("Hello world!");
     uint64_t len =  ft_strlen(lol);
     char* tmp = malloc(sizeof(uint8_t) * (len + 1));

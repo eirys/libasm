@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/12 14:16:43 by etran             #+#    #+#              #
-#    Updated: 2024/01/22 17:02:45 by etran            ###   ########.fr        #
+#    Updated: 2024/01/26 14:56:47 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@
 
 # ---------------- FINAL LIBRARY --------------- #
 NAME		:=	libasm.a
+BONUS		:=	libasm_bonus.a
 
 # --------------- DIRECTORY NAMES -------------- #
 SRC_DIR		:=	src
@@ -25,8 +26,7 @@ TEST_DIR	:=	tests
 # ---------------- SUBDIRECTORIES -------------- #
 BONUS_DIR	:=	bonus
 
-SUBDIRS		:=	\
-				$(BONUS_DIR)
+SUBDIRS		:=	$(BONUS_DIR)
 
 OBJ_SUBDIRS	:=	$(addprefix $(OBJ_DIR)/,$(SUBDIRS))
 
@@ -36,11 +36,15 @@ SRC_FILES	:=	ft_strlen.s \
 				ft_strcmp.s \
 				ft_strdup.s \
 				ft_read.s \
-				ft_write.s \
-				$(BONUS_DIR)/ft_list_push_front.s
+				ft_write.s
+
+BONUS_FILES	:=	$(BONUS_DIR)/ft_list_push_front.s \
+				$(BONUS_DIR)/ft_atoi_base.s
 
 SRC			:=	$(addprefix $(SRC_DIR)/,$(SRC_FILES))
 OBJ			:=	$(addprefix $(OBJ_DIR)/,$(SRC_FILES:.s=.o))
+BONUS_SRC	:=	$(addprefix $(SRC_DIR)/,$(BONUS_FILES))
+BONUS_OBJ	:=	$(addprefix $(OBJ_DIR)/,$(BONUS_FILES:.s=.o))
 
 # ----------------- COMPILATION ---------------- #
 ASM			:=	nasm
@@ -72,6 +76,9 @@ TEST_FILE	:=	$(TEST_DIR)/main.c
 .PHONY: all
 all: $(NAME)
 
+.PHONY: bonus
+bonus: $(BONUS)
+
 # Test library
 $(TEST_BIN): $(NAME)
 	@$(CXX) $(CFLAGS) $(TEST_FILE) -o $(TEST_BIN) $(NAME)
@@ -81,11 +88,17 @@ $(TEST_BIN): $(NAME)
 	@echo "== Done. =============="
 	@make -s clean_test
 
-# Compile library
+# Compile mandatory library
 $(NAME): $(OBJ)
 	@echo "Compiling $(NAME)..."
 	@$(ARCHIVER) $(ARFLAGS) $(NAME) $(OBJ)
 	@echo "\`$(NAME)\` successfully created."
+
+# Compile bonus library
+$(BONUS): $(BONUS_OBJ)
+	@echo "Compiling $(BONUS)..."
+	@$(ARCHIVER) $(ARFLAGS) $(BONUS) $(BONUS_OBJ)
+	@echo "\`$(BONUS)\` successfully created."
 
 # Compile obj files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
@@ -96,7 +109,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 .PHONY: clean
 clean:
 	@${RM} $(OBJ_DIR)
-	@echo "Cleaning object files and dependencies."
+	@echo "Cleaning object files."
 
 .PHONY: clean_test
 clean_test:
@@ -107,6 +120,8 @@ clean_test:
 fclean: clean clean_test
 	@${RM} $(NAME)
 	@echo "Removed $(NAME)."
+	@${RM} $(BONUS)
+	@echo "Removed $(BONUS)."
 
 .PHONY: re
 re: fclean all

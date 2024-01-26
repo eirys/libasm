@@ -14,7 +14,6 @@ extern malloc
 
 ; void ft_list_push_front(t_list **begin_list, void *data);
 ft_list_push_front:
-    ; mov     rcx,                rdi         ; rcx = rdi // with rdi = begin_list
     push    rdi
     push    rsi
     mov     rdi,                struct_size ; rdi = struct_size;
