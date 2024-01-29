@@ -2,13 +2,6 @@ global ft_atoi_base
 
 ; -----------------------
 section .data
-
-    ; Empty bitmask:
-    ; 0000 0000 0000 0000
-    ; 0000 0000 0000 0000
-    ; 0000 0000 0000 0000
-    ; 0000 0000 0000 0000
-
     ; Bitmask for sign:
     ; `+` : 43
     ; `-` : 45
@@ -37,25 +30,23 @@ section .text
 ft_atoi_base:
 
 ; Check base validity
-.is_valid:
-    mov     rcx,            rsi
+    mov     r9,            rsi
 
 .loop_is_valid:
-    mov     rdx,           BYTE [rcx]
+    mov     rdx,           [r9]
     test    dl,            dl
-    jz      .has_enough_ch
+    jz      .has_enough_ch ; TODO
 
 ; .is_sign:
     mov     rax,            sign_bitmask
     bt      rax,            rdx
     jnz     .error
 
-; .j = i + 1
-.loop_is_unique:
-    mov     rax,            rcx
+; .is_unique:
+    mov     rax,            r9
     mov     al,             BYTE [rax + 1]
     test    al,             al
-    jz      .loop_isvalid
+    jz      .loop_is_valid  ; end while(base[j]) // TODO
 
 ; .is_double:
     cmp     dl,             al
@@ -65,19 +56,62 @@ ft_atoi_base:
     mov     rax,            ws_bitmask
     bt      rax,            rdx
     jnz     .error
-    inc     rcx
+    inc     r9
 
-    jmp     .loop_isvalid
+    jmp     .loop_is_valid
 
 .has_enough_ch:
-    sub     rcx,            rsi
-    cmp     rcx,            2
+    sub     r9,            rsi
+    cmp     r9,            2
     jb      .error
 
-.convert:
+; .convert:
+    xor     rax,            rax
 
+.loop_sign:
+    mov     rdx,             [rdi]
+    test    rdx,             rdx
+    jz      .convert_value
 
-; return 0:
+; .is_sign2
+    mov     rcx,            sign_bitmask
+    bt      rcx,            rdx
+    jz      .error
+
+    cmp     rdx,             45
+    jne     .skip_negation
+    neg     eax
+
+.skip_negation:
+    inc     rdi
+    jmp     .loop_sign
+
+.convert_value:
+    mov     dl,             BYTE [rdi]
+    test    dl,             dl
+    jmp     .end
+
+.is_base:
+    mov     r8,             rsi
+
+.loop_check_base:
+    mov     cl,             BYTE [r8]
+    test    cl,             cl
+    jz      .end                        ; not in base -> End condition
+
+    cmp     cl,             dl
+    je      .get_index
+    inc     r8
+    jmp     .loop_check_base
+
+.get_index:
+    ; val
+    sub     r8,             rsi
+    mul     eax,            r9d
+    add     eax,            r8d
+    inc     rdi
+    jmp     .convert_value
+
 .error:
     xor     rax,            rax
 

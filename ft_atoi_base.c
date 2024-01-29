@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/22 12:52:53 by etran             #+#    #+#             */
-/*   Updated: 2024/01/26 16:31:50 by etran            ###   ########.fr       */
+/*   Updated: 2024/01/29 15:38:47 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,19 @@ int		len(char *base)
 	return (i);
 }
 
-int		is_inbase(char c, char *base)
+int isWs(char c) {
+	return (c == ' ' || c == '\t' ||
+	c == '\n' || c == '\v' || c == '\f' ||
+	c == '\r');
+}
+
+int isSign(char c) {
+	return (c == '+' || c == '-');
+}
+
+
+
+int		isCharset(char c, char *base)
 {
 	int i;
 
@@ -34,20 +46,12 @@ int		is_inbase(char c, char *base)
 	return (-1);
 }
 
-int isWs(char c) {
-	return (c == ' ' || c == '\t' ||
-	c == '\n' || c == '\v' || c == '\f' ||
-	c == '\r');
-}
-
-int isSign(char c) {
-	return (c == '+' || c == '-');
-}
 
 int		ft_convert(char *str, char *base)
 {
 	int sign;
 	int output;
+	int base_length = len(base);
 
 	sign = 1;
 	output = 0;
@@ -59,10 +63,10 @@ int		ft_convert(char *str, char *base)
 	}
 	while (*str)
 	{
-		int val = is_inbase(*str, base);
+		int val = isCharset(*str, base);
 		if (val < 0)
 			break;
-		output = (output * len(base)) + val;
+		output = (output * base_length) + val;
 		++str;
 	}
 	return (sign * output);
@@ -71,6 +75,9 @@ int		ft_convert(char *str, char *base)
 
 
 
+
+
+// DONE
 int		valid(char *base)
 {
 	int i;
@@ -82,12 +89,14 @@ int		valid(char *base)
 		if (isSign(base[i]))
 			return (0);
 		j = i + 1;
+
 		while (base[j])
 		{
 			if (base[i] == base[j] || isWs(base[j]))
 				return (0);
 			++j;
 		}
+
 		++i;
 	}
 	if (i < 2)
