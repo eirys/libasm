@@ -6,7 +6,7 @@
 /*   By: etran <etran@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 16:53:09 by etran             #+#    #+#             */
-/*   Updated: 2024/01/26 19:37:55 by etran            ###   ########.fr       */
+/*   Updated: 2024/01/30 13:21:54 by etran            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ void        ft_list_push_front(t_list **begin_list, void *data);
 
 #define LOG(X)  printf("%s\n", X)
 
-int main(int ac, char** av) {
-    if (ac != 3) {
-        LOG("Input 2 args to test atoi as well.");
-        return 1;
-    }
+int main(/* int ac, char** av */) {
+    // if (ac != 3) {
+    //     LOG("Input 2 args to test atoi as well.");
+    //     return 1;
+    // }
 
-	printf("%d\n", ft_atoi_base(av[1],av[2]));
+	// printf("%d\n", ft_atoi_base(av[1],av[2]));
 
     char* lol = ft_strdup("Hello world!");
     uint64_t len =  ft_strlen(lol);
@@ -61,11 +61,11 @@ int main(int ac, char** av) {
     assert(ft_strcmp("42a\0", "42ai\0") < 0);
 
     int new_len = len;
-    while ((new_len = ft_read(STDIN_FILENO, tmp, new_len)) != 0)
-    {
-        ft_write(STDOUT_FILENO, tmp, new_len);
-        tmp[new_len] = 0;
-    }
+    // while ((new_len = ft_read(STDIN_FILENO, tmp, new_len)) != 0)
+    // {
+    //     ft_write(STDOUT_FILENO, tmp, new_len);
+    //     tmp[new_len] = 0;
+    // }
 
     free(lol);
     free(tmp);
@@ -77,5 +77,9 @@ int main(int ac, char** av) {
     ft_write(STDOUT_FILENO, (char *)begin->data, ft_strlen((char *)begin->data));
 
     free(begin);
+
+	printf("%d\n", ft_atoi_base("2", "0123456789abcdef"));
+    // ft_atoi_base("255", "0123456789abcdef");
+
     return 0;
 }

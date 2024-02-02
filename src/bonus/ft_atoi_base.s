@@ -30,17 +30,19 @@ section .text
 ft_atoi_base:
 
 ; Check base validity
-    mov     r9,            rsi
+    mov     r9,             rsi
+    xor     rdx,            rdx
 
 .loop_is_valid:
-    mov     rdx,           [r9]
+    mov     dl,            BYTE [r9]
     test    dl,            dl
-    jz      .has_enough_ch ; TODO
+    jz      .has_enough_ch
 
 ; .is_sign:
-    mov     rax,            sign_bitmask
-    bt      rax,            rdx
-    jnz     .error
+    cmp     dl,             43  ; '+'
+    je      .error
+    cmp     dl,             45  ; '-'
+    je      .error
 
 ; .is_unique:
     mov     rax,            r9
@@ -53,34 +55,39 @@ ft_atoi_base:
     je      .error
 
 ; .is_ws:
+    cmp     rdx,            64
+    jae     .error
     mov     rax,            ws_bitmask
     bt      rax,            rdx
-    jnz     .error
+    jc      .error
     inc     r9
 
     jmp     .loop_is_valid
 
 .has_enough_ch:
-    sub     r9,            rsi
-    cmp     r9,            2
+    sub     r9,             rsi
+    cmp     r9,             2
     jb      .error
 
 ; .convert:
     xor     rax,            rax
 
 .loop_sign:
-    mov     rdx,             [rdi]
-    test    rdx,             rdx
+    mov     dl,             [rdi]
+    test    dl,             dl
     jz      .convert_value
 
-; .is_sign2
-    mov     rcx,            sign_bitmask
-    bt      rcx,            rdx
-    jz      .error
+; .is_sign2:
+    cmp     dl,             43  ; '+'
+    je      .error
+    cmp     dl,             45  ; '-'
+    je      .error
 
+; .is_negative:
     cmp     rdx,             45
     jne     .skip_negation
     neg     eax
+    jmp .error2
 
 .skip_negation:
     inc     rdi
@@ -107,13 +114,17 @@ ft_atoi_base:
 .get_index:
     ; val
     sub     r8,             rsi
-    mul     eax,            r9d
+    mul     r9d
     add     eax,            r8d
     inc     rdi
     jmp     .convert_value
 
 .error:
     xor     rax,            rax
+    jmp     .end ; REMOVE
+
+.error2:
+    mov     rax, 42
 
 .end:
     ret

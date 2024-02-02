@@ -6,7 +6,7 @@
 #    By: etran <etran@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/12 14:16:43 by etran             #+#    #+#              #
-#    Updated: 2024/01/26 14:56:47 by etran            ###   ########.fr        #
+#    Updated: 2024/01/30 13:21:12 by etran            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,8 +80,8 @@ all: $(NAME)
 bonus: $(BONUS)
 
 # Test library
-$(TEST_BIN): $(NAME)
-	@$(CXX) $(CFLAGS) $(TEST_FILE) -o $(TEST_BIN) $(NAME)
+$(TEST_BIN): $(NAME) $(BONUS)
+	@$(CXX) $(CFLAGS) $(TEST_FILE) -o $(TEST_BIN) $(NAME) $(BONUS)
 	@echo "\`$(TEST_BIN)\` file successfully created."
 	@echo "== Running \`$(TEST_BIN)\`... =="
 	@./$(TEST_BIN)
